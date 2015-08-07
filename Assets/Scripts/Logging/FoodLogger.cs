@@ -18,22 +18,22 @@ public class FoodLogger : MonoBehaviour {
 
 	void LogSpawned(){
 		if (!exp.isReplay) {
-			experimentLog.Log (GameClock.Instance.SystemTime_Milliseconds, myFood.GetName () + ",SPAWNED"); //add alpha value
+			experimentLog.Log (GameClock.Instance.SystemTime_Milliseconds, myFood.GetName () + ",SPAWNED");
 		}
 	}
 
-	void LogAlpha(){
+	public void LogAlpha(float alpha){ //should be called when alpha gets set in Food.cs
 		if (!exp.isReplay) {
-			experimentLog.Log (GameClock.Instance.SystemTime_Milliseconds, myFood.GetName () + ",ALPHA," + myFood.GetAlpha () + ",ID,"); //add alpha value
+			experimentLog.Log (GameClock.Instance.SystemTime_Milliseconds, gameObject.name + ",ALPHA," + alpha);
 		}
 	}
-
+	
 	void LogDestroyed(){
 		if (!exp.isReplay) {
 			experimentLog.Log (GameClock.Instance.SystemTime_Milliseconds, myFood.GetName () + ",DESTROYED," + 
 				gameObject.transform.position.x + 
 				"," + gameObject.transform.position.y + 
-				"," + gameObject.transform.position.z); //add alpha value
+				"," + gameObject.transform.position.z);
 		}
 	}
 	
@@ -46,7 +46,7 @@ public class FoodLogger : MonoBehaviour {
 			experimentLog.Log (GameClock.Instance.SystemTime_Milliseconds, myFood.GetName () + ",POSITION," +
 			                   gameObject.transform.position.x + 
 			                   "," + gameObject.transform.position.y + 
-			                   "," + gameObject.transform.position.z); //add alpha value
+			                   "," + gameObject.transform.position.z);
 		}
 	}
 	void LogRotation(){
@@ -54,7 +54,7 @@ public class FoodLogger : MonoBehaviour {
 			experimentLog.Log (GameClock.Instance.SystemTime_Milliseconds, myFood.GetName () + ",ROTATION," +
 			                   gameObject.transform.rotation.eulerAngles.x + 
 			                   "," + gameObject.transform.rotation.eulerAngles.y + 
-			                   "," + gameObject.transform.rotation.eulerAngles.z); //add alpha value
+			                   "," + gameObject.transform.rotation.eulerAngles.z);
 		}
 	}
 }

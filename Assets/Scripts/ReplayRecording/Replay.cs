@@ -171,10 +171,6 @@ public class Replay : MonoBehaviour {
 									
 								}
 								else if(loggedProperty == "ROTATION"){
-									if(currentFrame == 489){
-										//debug
-										int a = 0;
-									}
 									float rotX = float.Parse(splitLine[i+2]);
 									float rotY = float.Parse(splitLine[i+3]);
 									float rotZ = float.Parse(splitLine[i+4]);
@@ -184,17 +180,14 @@ public class Replay : MonoBehaviour {
 									objInScene.transform.rotation = newRot;
 
 								}
-								else if(loggedProperty == "VISIBILITY"){
+								else if(loggedProperty == "ALPHA"){
 									Food spawnedFood = objInScene.GetComponent<Food>();
 									if(spawnedFood != null){
-										bool visibleState = true;
-										if(splitLine[i+2] == "false" || splitLine[i+2] == "False"){
-											visibleState = false;
-										}
-										//spawnedFood.TurnVisible(visibleState);
+										float newAlpha = float.Parse(splitLine[i+2]);
+										spawnedFood.SetAlpha(newAlpha);
 									}
 									else{
-										Debug.Log("no spawnable object!");
+										Debug.Log("no food component!");
 									}
 								}
 								else if(loggedProperty == "DESTROYED"){

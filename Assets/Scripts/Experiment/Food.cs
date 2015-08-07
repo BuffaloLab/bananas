@@ -3,17 +3,27 @@ using System.Collections;
 using System.Text.RegularExpressions;
 
 public class Food : MonoBehaviour {
-	
-	float myAlpha = 1.0f;
+
+	AlphaChanger myAlphaChanger;
+
 	Material myMaterial;
 
 	void Start(){
-		//myMaterial = 
+		myAlphaChanger = gameObject.GetComponent<AlphaChanger> ();
+		SetAlpha (1.0f);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		//NOTE: testing alpha changing/logging
+		if (Input.GetKeyDown (KeyCode.Q)) {
+			if(myAlphaChanger.GetAlpha() == 1.0f){
+				SetAlpha(0.5f);
+			}
+			else{
+				SetAlpha(1.0f);
+			}
+		}
 	}
 
 	//get name without "(clone)" attached to it
@@ -39,24 +49,16 @@ public class Food : MonoBehaviour {
 	}
 
 	public void SetAlpha(float alpha){
-		myAlpha = alpha;
+		if (myAlphaChanger != null) {
+			myAlphaChanger.SetAlpha (alpha);
 
-		Renderer myMainRenderer = GetComponent<Renderer> ();
-		if (myMainRenderer != null) {
-			Color origColor = myMainRenderer.material.color;
-			Color newColor = new Color(origColor.r, origColor.g, origColor.b, alpha); 
-			myMainRenderer.material.color = newColor;
+			FoodLogger myFoodLogger = GetComponent<FoodLogger>();
+			if(myFoodLogger != null){
+				myFoodLogger.LogAlpha(alpha);
+			}
 		}
-
-		Renderer[] myRenderers = GetComponentsInChildren<Renderer> ();
-		for (int i = 0; i < myRenderers.Length; i++) {
-			Color origColor = myRenderers[i].material.color;
-			Color newColor = new Color(origColor.r, origColor.g, origColor.b, alpha); 
-			myRenderers[i].material.color = newColor;
+		else {
+			Debug.Log("No alpha changer attached.");
 		}
-	}
-
-	public float GetAlpha(){
-		return myAlpha;
 	}
 }
