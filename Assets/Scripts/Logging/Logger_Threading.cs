@@ -160,7 +160,9 @@ public class LoggerWriter : ThreadedJob
 public class Logger_Threading : MonoBehaviour{
 	LoggerQueue myLoggerQueue;
 	LoggerWriter myLoggerWriter;
-	
+
+	Experiment exp;
+
 	//protected static string fileName;
 	public static string fileName;
 
@@ -168,12 +170,16 @@ public class Logger_Threading : MonoBehaviour{
 
 	void Start ()
 	{
-		myLoggerQueue = new LoggerQueue();
-		myLoggerWriter = new LoggerWriter (fileName, myLoggerQueue);
+		exp = GameObject.FindGameObjectWithTag ("Experiment").GetComponent<Experiment>();
+
+		if (!exp.isReplay) {
+			myLoggerQueue = new LoggerQueue ();
+			myLoggerWriter = new LoggerWriter (fileName, myLoggerQueue);
 		
-		myLoggerWriter.Start ();
+			myLoggerWriter.Start ();
 		
-		myLoggerWriter.log("\nDATE: " + DateTime.Now.ToString("M/d/yyyy")); //might not be needed
+			myLoggerWriter.log ("\nDATE: " + DateTime.Now.ToString ("M/d/yyyy")); //might not be needed
+		}
 	}
 	
 	public Logger_Threading(string file){
@@ -197,7 +203,7 @@ public class Logger_Threading : MonoBehaviour{
 	
 	public void Log(long timeLogged, string newLogInfo){
 		if (myLoggerQueue != null) {
-			myLoggerQueue.AddToLogQueue (timeLogged + " " + newLogInfo + " " + frameCount);
+			myLoggerQueue.AddToLogQueue (timeLogged + "," + frameCount + "," + newLogInfo);
 		}
 	}
 	
@@ -205,6 +211,8 @@ public class Logger_Threading : MonoBehaviour{
 	public void close(){
 		//Application stopped running -- close() was called
 		//applicationIsRunning = false;
-		myLoggerWriter.End ();
+		if (!exp.isReplay) {
+			myLoggerWriter.End ();
+		}
 	}
 }

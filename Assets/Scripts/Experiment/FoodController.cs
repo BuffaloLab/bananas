@@ -16,32 +16,38 @@ public class FoodController : MonoBehaviour {
 		exists = new List<GameObject> ();
 		exists.Add(player);
 	}
-	
-	void Update()
-	{
-		GameObject [] left = GameObject.FindGameObjectsWithTag ("Food");
-		if (left.Length <=0) {
-			SpawnBananas();
-			SpawnCherries();
-		}
-	}
 
-	void SpawnBananas(){
+	public void SpawnBananas(){
 		SpawnSet (spawnBanana, numBananas);
 	}
 
-	void SpawnCherries(){
+	public void SpawnCherries(){
 		SpawnSet (spawnCherry, numCherries);
 	}
 
-	void SpawnSet(GameObject foodToSpawn, int numFruit){
+	public void SpawnSet(GameObject foodToSpawn, int numFruit){
 		emptyList();
 		for (int i = 0; i<numFruit; i++) {
 			SpawnObject(foodToSpawn, i);
 		}
 	}
+
+	public GameObject SpawnObjectByName(string foodName, int nameID){ //for use in replay, in particular
+		GameObject spawned = null;
+
+		if (foodName == spawnBanana.GetComponent<Food> ().GetName ()) {
+			spawned = SpawnObject (spawnBanana, nameID);
+		} else if (foodName == spawnCherry.GetComponent<Food> ().GetName ()) {
+			spawned = SpawnObject (spawnCherry, nameID);
+		} else {
+			Debug.Log ("Cannot spawn food of name: " + foodName);
+		}
+
+		return spawned;
+	}
+
 	
-	void SpawnObject(GameObject foodToSpawn, int ID){
+	public GameObject SpawnObject(GameObject foodToSpawn, int nameID){
 		bool keepThis;
 		bool itfits = false;
 		float x;
@@ -75,7 +81,9 @@ public class FoodController : MonoBehaviour {
 		float randomRotation = Random.Range(0.0f, 360.0f);
 		spawnedObj.transform.RotateAround(spawnedObj.transform.position, Vector3.up, randomRotation);
 
-		spawnedObj.GetComponent<Food>().SetIDNum(ID);
+		spawnedObj.GetComponent<Food>().SetNameID(nameID);
+
+		return spawnedObj;
 	}
 	
 	float Distance(float x1, float z1, float x2, float z2){
@@ -86,6 +94,5 @@ public class FoodController : MonoBehaviour {
 		exists.Clear ();
 		exists.Add (player);
 	}
-
-		
+	
 }
