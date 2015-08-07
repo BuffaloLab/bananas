@@ -5,9 +5,13 @@ public class ObjectLogger : MonoBehaviour {
 	Logger_Threading experimentLog {get {return LogController.Instance.log; }}
 	Experiment exp;
 
+	void Awake(){
+		exp = GameObject.FindGameObjectWithTag ("Experiment").GetComponent<Experiment>();
+	}
+
 	// Use this for initialization
 	void Start () {
-		exp = GameObject.FindGameObjectWithTag ("Experiment").GetComponent<Experiment>();
+
 	}
 	
 	// Update is called once per frame

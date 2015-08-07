@@ -7,10 +7,13 @@ public class FoodLogger : MonoBehaviour {
 
 	Food myFood;
 
+	void Awake(){
+		exp = GameObject.FindGameObjectWithTag ("Experiment").GetComponent<Experiment> ();
+		myFood = GetComponent<Food> ();
+	}
+
 	// Use this for initialization
 	void Start () {
-		exp = GameObject.FindGameObjectWithTag ("Experiment").GetComponent<Experiment>();
-		myFood = GetComponent<Food> ();
 		LogSpawned ();
 		LogPosition ();
 		LogRotation ();
@@ -29,6 +32,7 @@ public class FoodLogger : MonoBehaviour {
 	}
 	
 	void LogDestroyed(){
+		//Destroy was getting called on an inactive object that had never had exp set. thus, check for null exp here.
 		if (!exp.isReplay) {
 			experimentLog.Log (GameClock.Instance.SystemTime_Milliseconds, myFood.GetName () + ",DESTROYED," + 
 				gameObject.transform.position.x + 
@@ -49,6 +53,7 @@ public class FoodLogger : MonoBehaviour {
 			                   "," + gameObject.transform.position.z);
 		}
 	}
+
 	void LogRotation(){
 		if (!exp.isReplay) {
 			experimentLog.Log (GameClock.Instance.SystemTime_Milliseconds, myFood.GetName () + ",ROTATION," +
