@@ -142,6 +142,7 @@ public class Replay : MonoBehaviour {
 										//we could also check for the SPAWNED keyword
 									//parse out name of object from ID
 									string fruitID = "";
+									//TODO: MAKE THIS GENERIC, NOT CASE BY CASE FOR EVERY FRUIT.
 									if(objName.Contains("banana")){
 										string[] splitFruitName = objName.Split('a');
 										fruitID = splitFruitName[splitFruitName.Length -1]; //get the last thing in the split
