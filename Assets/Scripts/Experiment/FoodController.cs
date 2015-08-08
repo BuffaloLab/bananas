@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 
 public class FoodController : MonoBehaviour {
+	Experiment exp;
+
 	public GameObject spawnBanana;
 	public GameObject spawnCherry;
 	public GameObject player;
@@ -13,6 +15,7 @@ public class FoodController : MonoBehaviour {
 	private List<GameObject> exists; //food and the player that exist in the world
 	
 	void Start(){
+		exp = GameObject.FindGameObjectWithTag ("Experiment").GetComponent<Experiment> ();
 		exists = new List<GameObject> ();
 		exists.Add(player);
 	}
@@ -36,6 +39,7 @@ public class FoodController : MonoBehaviour {
 		GameObject spawnedObj  = Instantiate(foodToSpawn, location, foodToSpawn.transform.rotation) as GameObject;
 		float randomRotation = Random.Range(0.0f, 360.0f);
 		spawnedObj.transform.RotateAround(spawnedObj.transform.position, Vector3.up, randomRotation);
+		spawnedObj.GetComponent<Food>().SetNameID(nameID);
 	}
 
 	public GameObject SpawnObjectByName(string foodName, int nameID){ //for use in replay, in particular
@@ -54,42 +58,46 @@ public class FoodController : MonoBehaviour {
 
 	
 	public GameObject SpawnObject(GameObject foodToSpawn, int nameID){
+
 		bool keepThis;
 		bool itfits = false;
-		float x;
-		float z;
+		float x = 0;
+		float z = 0;
 		int maxIt = 100000;
 		int it = 0;
 
-		do {
+		if (!exp.isReplay) {
 			do {
-				keepThis = true;
-				x = Random.Range (-9f, 9f);
-				z = Random.Range (-9f, 9f);
-				for (int i = 0; i<exists.Count; i++) {
-					if (Distance (exists [i].transform.position.x, exists [i].transform.position.z, x, z) < distThresh) {
-						keepThis = false;
+				do {
+					keepThis = true;
+					x = Random.Range (-9f, 9f);
+					z = Random.Range (-9f, 9f);
+					for (int i = 0; i<exists.Count; i++) {
+						if (Distance (exists [i].transform.position.x, exists [i].transform.position.z, x, z) < distThresh) {
+							keepThis = false;
+						}
 					}
+					it++;
+				} while(keepThis == false && it<maxIt);
+				if (!keepThis) {
+					it = 0;
+					distThresh /= 2;
+					print (distThresh);
+				} else {
+					itfits = true;
 				}
-				it++;
-			} while(keepThis == false && it<maxIt);
-			if (!keepThis){
-				it = 0;
-				distThresh /=2;
-				print (distThresh);
-			}else{
-				itfits = true;
-			}
-		} while(itfits == false);
-		GameObject spawnedObj  = Instantiate(foodToSpawn, new Vector3(x,.5f,z), foodToSpawn.transform.rotation) as GameObject;
+			} while(itfits == false);
+		}
+		GameObject spawnedObj = Instantiate (foodToSpawn, new Vector3 (x, .5f, z), foodToSpawn.transform.rotation) as GameObject;
 		exists.Add (spawnedObj);
 
-		float randomRotation = Random.Range(0.0f, 360.0f);
-		spawnedObj.transform.RotateAround(spawnedObj.transform.position, Vector3.up, randomRotation);
+		float randomRotation = Random.Range (0.0f, 360.0f);
+		spawnedObj.transform.RotateAround (spawnedObj.transform.position, Vector3.up, randomRotation);
 
-		spawnedObj.GetComponent<Food>().SetNameID(nameID);
+		spawnedObj.GetComponent<Food> ().SetNameID (nameID);
 
 		return spawnedObj;
+
 	}
 	
 	float Distance(float x1, float z1, float x2, float z2){

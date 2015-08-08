@@ -146,6 +146,10 @@ public class Replay : MonoBehaviour {
 										string[] splitFruitName = objName.Split('a');
 										fruitID = splitFruitName[splitFruitName.Length -1]; //get the last thing in the split
 									}
+									if(objName.Contains("Cherry")){
+										string[] splitFruitName = objName.Split('y');
+										fruitID = splitFruitName[splitFruitName.Length -1]; //get the last thing in the split
+									}
 
 									//data.Split(new string[] { "xx" }, StringSplitOptions.None)
 

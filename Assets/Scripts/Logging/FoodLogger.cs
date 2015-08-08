@@ -27,7 +27,7 @@ public class FoodLogger : MonoBehaviour {
 
 	public void LogAlpha(float alpha){ //should be called when alpha gets set in Food.cs
 		if (!exp.isReplay) {
-			experimentLog.Log (GameClock.Instance.SystemTime_Milliseconds, gameObject.name + ",ALPHA," + alpha);
+			experimentLog.Log (GameClock.Instance.SystemTime_Milliseconds, myFood.GetName() + ",ALPHA," + alpha);
 		}
 	}
 	

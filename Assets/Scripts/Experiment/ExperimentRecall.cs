@@ -7,7 +7,7 @@ public class ExperimentRecall : Experiment {
 	Logger_Threading experimentLog {get {return LogController.Instance.log; }}
 
 	Stopwatch recallTimer;
-	long maxRecallTimeMS = 5000; //in milliseconds
+	long maxRecallTimeMS = 60000; //in milliseconds
 
 	//Subject config settings
 	public MonkeyConfig ChosenMonkey_Foraging;
@@ -69,7 +69,7 @@ public class ExperimentRecall : Experiment {
 	}
 
 	void NewTrial(){
-		experimentLog.Log (GameClock.Instance.SystemTime_Milliseconds, ",Start Trail," + trialCount);
+		//experimentLog.Log (GameClock.Instance.SystemTime_Milliseconds, ",Start Trail," + trialCount);
 		stateIs = State.target;
 		print ("State is now Target");
 		//Start over counting
@@ -91,13 +91,13 @@ public class ExperimentRecall : Experiment {
 	//Change state, advance to next fruit. 
 	void NextFruit(){
 		UnityEngine.Debug.Log ("Next fruit!");
-
-		switch (stateIs) {
+		if (!isReplay) {
+			switch (stateIs) {
 			case State.target:
 				stateIs = State.distractor;
 				SpawnDistractor ();
 				print ("State is now Distractor");
-			break;
+				break;
 			case State.distractor:
 				if (currentDistractor >= numDistractorFruit) {//if no more distractors are needed
 					currentDistractor = 0;
@@ -105,54 +105,56 @@ public class ExperimentRecall : Experiment {
 					if (currentEncoding < numEncodingTrials) {//if more encoding trials are needed
 						//move to target step;
 						stateIs = State.target;
-						SpawnTarget();
+						SpawnTarget ();
 						print ("State is now Target");
-					}
-					else {//time for recall step
+					} else {//time for recall step
 						//move to recall step
 						stateIs = State.recall;
-						recallTimer.Start();
+						recallTimer.Start ();
 						print ("State is now Recall");
 					}
-				} 
-				else {//more distractor fruit are needed
+				} else {//more distractor fruit are needed
 					SpawnDistractor ();
-			}
-			break;
+				}
+				break;
 			case State.recall:
 				stateIs = State.cleanup;
 					//Spawn a fruit in front of the player;
-				Vector3 newPos = player.transform.position +player.transform.forward*1;					
+				Vector3 newPos = player.transform.position + player.transform.forward * 1;					
 				if ((newPos.x > 9.5f) || (newPos.x < -9.5f) || newPos.x > 9.5f || newPos.x < -9.5f) { //new location is outside a wall! make game object in old spot
 					GameObject lastTarget = Instantiate (target, bananaPosition, target.transform.rotation) as GameObject;
-				}
-				else { //new location is good! make a banana there!
+				} else { //new location is good! make a banana there!
 					GameObject lastTarget = Instantiate (target, newPos, target.transform.rotation) as GameObject;
 				}
-			break;
+				break;
 			case State.cleanup:
 					//start next trial;
 				NewTrial ();
-			break;
+				break;
+			}
 		}
 	}
 
 	void SpawnTarget(){
-		myFoodController.SpawnObjectAt (target, bananaPosition, currentEncoding);
+		if (!isReplay) {
+			myFoodController.SpawnObjectAt (target, bananaPosition, currentEncoding);
+		}
 	}
 
 	void SpawnDistractor(){
 		currentDistractor++;
 		//Find a good location for the distractor
-		float x;
-		float z;
-		do {
-			x = RandomPos ();
-			z = RandomPos ();
-		} while((Distance (x,z,player.transform.position.x,player.transform.position.z)<distanceThreshold) || (Distance (x,z,bananaPosition.x,bananaPosition.z)<distanceThreshold));
-		//Spawn distractor;
-		int distractorID = numDistractorFruit * currentEncoding + currentDistractor;//keeps track of distractor ID between target steps.
-		myFoodController.SpawnObjectAt (distractor, new Vector3 (x, .5f, z), distractorID);
+		if (!isReplay) {
+			float x;
+			float z;
+			do {
+				x = RandomPos ();
+				z = RandomPos ();
+			} while((Distance (x,z,player.transform.position.x,player.transform.position.z)<distanceThreshold) || (Distance (x,z,bananaPosition.x,bananaPosition.z)<distanceThreshold));
+			//Spawn distractor;
+			int distractorID = numDistractorFruit * currentEncoding + currentDistractor;//keeps track of distractor ID between target steps.
+			myFoodController.SpawnObjectAt (distractor, new Vector3 (x, .5f, z), distractorID);
+		}
 	}
 
 	float Distance(float x1, float z1, float x2, float z2){
