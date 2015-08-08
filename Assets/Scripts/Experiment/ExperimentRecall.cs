@@ -91,7 +91,7 @@ public class ExperimentRecall : Experiment {
 	//Change state, advance to next fruit. 
 	void NextFruit(){
 		UnityEngine.Debug.Log ("Next fruit!");
-		if (!isReplay) {
+		if (!isReplay) { //TODO: TRY TO MAKE THIS CHECK LESS. MAKE THIS LESS HACK-Y.
 			switch (stateIs) {
 			case State.target:
 				stateIs = State.distractor;
