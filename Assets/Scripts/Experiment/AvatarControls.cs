@@ -5,6 +5,9 @@ public class AvatarControls : MonoBehaviour{
 
 	Experiment exp;
 
+	public delegate void OnFoodCollision();
+	public OnFoodCollision OnFoodCollisionDelegate;
+
 	public bool ShouldLockControls = false;
 	public float driveSpeed = 5.0f;
 
@@ -34,11 +37,8 @@ public class AvatarControls : MonoBehaviour{
 	{
 		if (other.gameObject.CompareTag ("Food")) 
 		{
+			OnFoodCollisionDelegate(); //All functions that subscribe to this event will be called.
 			Destroy(other.gameObject);
-			//other.gameObject.SetActive(false);
-			//other.gameObject.tag = "Eaten";
-			//print (GameObject.FindGameObjectsWithTag ("Food").Length);
-			//count = count+1;
 		}
 	}
 

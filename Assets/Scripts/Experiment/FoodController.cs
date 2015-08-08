@@ -32,6 +32,12 @@ public class FoodController : MonoBehaviour {
 		}
 	}
 
+	public void SpawnObjectAt(GameObject foodToSpawn, Vector3 location, int nameID){
+		GameObject spawnedObj  = Instantiate(foodToSpawn, location, foodToSpawn.transform.rotation) as GameObject;
+		float randomRotation = Random.Range(0.0f, 360.0f);
+		spawnedObj.transform.RotateAround(spawnedObj.transform.position, Vector3.up, randomRotation);
+	}
+
 	public GameObject SpawnObjectByName(string foodName, int nameID){ //for use in replay, in particular
 		GameObject spawned = null;
 
