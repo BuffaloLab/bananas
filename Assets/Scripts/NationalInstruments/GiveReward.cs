@@ -2,15 +2,17 @@
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 public class GiveReward : MonoBehaviour {
-	 
-	[DllImport ("NidaqPlugin")]
-	private static extern int reward(int on);
 
-	static bool CheckLibrary(string fileName) {
-		return reward (fileName) == IntPtr.Zero;
+	//[DllImport ("NidaqPlugin")]
+	//private static extern int reward(int on);
+
+	static int reward (int on) {
+		return on;
 	}
+
 	//[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 	//public delegate void set_callback(IntPtr data);
 
