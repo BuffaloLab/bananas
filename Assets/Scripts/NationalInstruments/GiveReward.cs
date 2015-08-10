@@ -20,7 +20,7 @@ public class GiveReward : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		eog_set_callback (eye_data);
+		//eog_set_callback (eye_data);
 		//Debug.Log(PrintANumber());
 		// Debug.Log (reward (true));
 		//Debug.Log (reward (0));
