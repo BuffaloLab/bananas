@@ -82,6 +82,16 @@ public class Replay : MonoBehaviour {
 	IEnumerator ProcessLogFile(){
 
 		long currentFrame = 0;
+		long currentTimeStamp = 0;
+		long lastTimeRecorded = 0;
+		long timeDifference = 0;
+
+		if (exp.ReplayFramesPerSecond == 0) {
+			Debug.Log("ERROR: SET FRAMESPERSECOND TO SOMETHING NOT ZERO.");
+		}
+
+		float secondsPerFrame = 1.0f / (float)exp.ReplayFramesPerSecond;
+		int millisecondsPerFrame = Mathf.RoundToInt( secondsPerFrame * 1000 );
 
 		fileReader = new StreamReader (LogFilePath); //yes, this is redundant. see ReplayScene()'s try-catch block. but it works...
 		
@@ -101,23 +111,62 @@ public class Replay : MonoBehaviour {
 				for (int i = 0; i < splitLine.Length; i++){
 
 					//0 -- timestamp
-					if (i == 0){
+					if(i == 0){
+						currentTimeStamp = long.Parse(splitLine[i]);
+						timeDifference = currentTimeStamp - lastTimeRecorded;
+						/*if(timeDifference > millisecondsPerFrame){ //if enough time has passed
 
+
+							if(hasFinishedSettingFrame){ //wait until the current frame has been set -- otherwise, bad things could happen, such as a banana not getting destroyed before a new cherry is rendered.
+								//record a frame if it's been enough time and the frame has been set
+								if(exp.isSavingToPng){
+									RecordScreenShot();
+								}
+								Debug.Log("Time to record screenshot. Frame: " + currentFrame + " Time Stamp: " + currentTimeStamp + " Time Difference: " + timeDifference);
+								lastTimeStamp = currentTimeStamp;
+								hasFinishedSettingFrame = false;
+								yield return 0;
+							}
+						}*/
 					}
 					else if(i == 1){
 						long readFrame = long.Parse(splitLine[i]);
+						
 						while(readFrame != currentFrame){
 							currentFrame++;
 							hasFinishedSettingFrame = true;
 
+							//Debug.Log(currentFrame);
+						}
+
+						//first frame case -- need to set the last time recorded as the current time stamp
+						if (currentFrame == 1 && hasFinishedSettingFrame){ //record frame 0 before reading and setting the rest of frame 1...
+							lastTimeRecorded = currentTimeStamp;
+
 							if(exp.isSavingToPng){
 								RecordScreenShot();
 							}
-
 							yield return 0;
 
-							//Debug.Log(currentFrame);
 						}
+						else if(timeDifference > millisecondsPerFrame){
+							int numFramesToCapture = Mathf.FloorToInt( (float)timeDifference / millisecondsPerFrame ); //EXAMPLE: if time passed is 30 milliseconds and the required time per frame is 15 milliseconds, you should capture 2 frames
+
+
+							for(int j = 0; j < numFramesToCapture; j++){
+								if(exp.isSavingToPng){
+									RecordScreenShot();
+								}
+								yield return 0;
+							}
+
+							long timeToAddToLastTimeStamp = numFramesToCapture*millisecondsPerFrame; //EXAMPLE: if you capture 2 frames, add 2 frames worth of time to the last time step
+							lastTimeRecorded += timeToAddToLastTimeStamp;
+
+							//DEBUG TO CHECK THAT THE TIME INCREMENT IS WORKING PROPERLY
+							//Debug.Log("Time to record screenshot. Frame: " + currentFrame + " Time Stamp: " + currentTimeStamp + " Last Time Recorded: " + lastTimeRecorded + " Time Difference: " + timeDifference + " Num Frames Recorded: " + numFramesToCapture);
+						}
+
 					}
 					//2 -- name of object
 					else if (i == 2){
@@ -219,13 +268,12 @@ public class Replay : MonoBehaviour {
 				//read the next line at the end of the while loop
 				currentLogFileLine = fileReader.ReadLine ();
 
-				if(hasFinishedSettingFrame){ //
-					//yield return new WaitForFixedUpdate();	 //REPLAY BASED ON FIXEDUPDATE FOR FRAMERATE INDEPENDENCE (logging was also logged via FixedUpdate())
+				/*if(hasFinishedSettingFrame){ //
 					yield return 0; //WHILE LOGGED ON FIXED UPDATE, REPLAY ON UPDATE TO GET A CONSTANT #RENDERED FRAMES
 
 					hasFinishedSettingFrame = false;
 
-				}
+				}*/
 			}
 		}
 
