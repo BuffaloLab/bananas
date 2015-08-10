@@ -4,16 +4,20 @@ using System.Collections;
 using System.Runtime.InteropServices;
 
 public class GiveReward : MonoBehaviour {
+	 
 	[DllImport ("NidaqPlugin")]
 	private static extern int reward(int on);
 
-	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-	public delegate void set_callback(IntPtr data);
+	static bool CheckLibrary(string fileName) {
+		return reward (fileName) == IntPtr.Zero;
+	}
+	//[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+	//public delegate void set_callback(IntPtr data);
 
-	[DllImport ("NidaqPlugin")]
-	private static extern int eog_set_callback (
-		[MarshalAs(UnmanagedType.FunctionPtr)]set_callback 
-		eog_callback);
+	//[DllImport ("NidaqPlugin")]
+	//private static extern int eog_set_callback (
+	//	[MarshalAs(UnmanagedType.FunctionPtr)]set_callback 
+	//		eog_callback);
 	
 	//[DllImport ("ASimplePlugin")]
 	//private static extern int reward(int on);
