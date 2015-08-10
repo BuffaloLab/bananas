@@ -49,6 +49,10 @@ public class Food : MonoBehaviour {
 	}
 
 	public void SetAlpha(float alpha){
+		if (myAlphaChanger == null) {
+			myAlphaChanger = GetComponent<AlphaChanger>();
+		}
+
 		if (myAlphaChanger != null) {
 			myAlphaChanger.SetAlpha (alpha);
 
