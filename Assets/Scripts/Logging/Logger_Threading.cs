@@ -178,7 +178,7 @@ public class Logger_Threading : MonoBehaviour{
 		
 			myLoggerWriter.Start ();
 		
-			myLoggerWriter.log ("\nDATE: " + DateTime.Now.ToString ("M/d/yyyy")); //might not be needed
+			myLoggerWriter.log ("DATE: " + DateTime.Now.ToString ("M/d/yyyy")); //might not be needed
 		}
 	}
 	

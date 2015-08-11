@@ -113,22 +113,9 @@ public class Replay : MonoBehaviour {
 					//0 -- timestamp
 					if(i == 0){
 						currentTimeStamp = long.Parse(splitLine[i]);
-						timeDifference = currentTimeStamp - lastTimeRecorded;
-						/*if(timeDifference > millisecondsPerFrame){ //if enough time has passed
-
-
-							if(hasFinishedSettingFrame){ //wait until the current frame has been set -- otherwise, bad things could happen, such as a banana not getting destroyed before a new cherry is rendered.
-								//record a frame if it's been enough time and the frame has been set
-								if(exp.isSavingToPng){
-									RecordScreenShot();
-								}
-								Debug.Log("Time to record screenshot. Frame: " + currentFrame + " Time Stamp: " + currentTimeStamp + " Time Difference: " + timeDifference);
-								lastTimeStamp = currentTimeStamp;
-								hasFinishedSettingFrame = false;
-								yield return 0;
-							}
-						}*/
+						timeDifference = currentTimeStamp - lastTimeRecorded; //gets time between log file lines
 					}
+					//1 -- frame
 					else if(i == 1){
 						long readFrame = long.Parse(splitLine[i]);
 						
@@ -146,21 +133,21 @@ public class Replay : MonoBehaviour {
 							if(exp.isSavingToPng){
 								RecordScreenShot();
 							}
-							yield return 0;
+							yield return 0; //advance the game a frame before continuing
 
 						}
 						else if(timeDifference > millisecondsPerFrame){
 							int numFramesToCapture = Mathf.FloorToInt( (float)timeDifference / millisecondsPerFrame ); //EXAMPLE: if time passed is 30 milliseconds and the required time per frame is 15 milliseconds, you should capture 2 frames
 
-
+							//record and wait the appropriate number of frames
 							for(int j = 0; j < numFramesToCapture; j++){
 								if(exp.isSavingToPng){
 									RecordScreenShot();
 								}
-								yield return 0;
+								yield return 0; //advance the game a frame before continuing
 							}
 
-							long timeToAddToLastTimeStamp = numFramesToCapture*millisecondsPerFrame; //EXAMPLE: if you capture 2 frames, add 2 frames worth of time to the last time step
+							long timeToAddToLastTimeStamp = numFramesToCapture*millisecondsPerFrame; //EXAMPLE: if you capture 2 frames, add 2 frames worth of time to the last time that we recorded a frame to a PNG
 							lastTimeRecorded += timeToAddToLastTimeStamp;
 
 							//DEBUG TO CHECK THAT THE TIME INCREMENT IS WORKING PROPERLY
@@ -168,13 +155,20 @@ public class Replay : MonoBehaviour {
 						}
 
 					}
+
 					//2 -- name of object
 					else if (i == 2){
 						string objName = splitLine[i];
 
-						GameObject objInScene;
+						GameObject objInScene = null;
 
-						if(objsInSceneDict.ContainsKey(objName)){
+						//IF YOU LOG THE JOYSTICK, OR SOME OTHER NON-GEOMETRY ITEM...
+						//...don't go through the object instantiation part.
+						if(objName == "Joystick"){
+
+						}
+						//THE FOLLOWING IS FOR OBJECTS THAT SHOULD BE IN THE SCENE
+						else if(objsInSceneDict.ContainsKey(objName)){
 							
 							objInScene = objsInSceneDict[objName];
 
@@ -188,8 +182,8 @@ public class Replay : MonoBehaviour {
 							}
 							else{ //if the object is not in the scene, but is in the log file, we should instantiate it!
 									//we could also check for the SPAWNED keyword
-								//parse out name of object from ID
 
+								//THE FOLLOWING IS FOR FOOD ONLY.
 								//separate out the fruit name from the numeric ID
 								Regex numAlpha = new Regex("(?<Alpha>[a-zA-Z]*)(?<Numeric>[0-9]*)");
 								Match match = numAlpha.Match(objName);
@@ -240,22 +234,6 @@ public class Replay : MonoBehaviour {
 								Debug.Log("Destroying object! " + objInScene.name);
 								GameObject.Destroy(objInScene);
 							}
-
-							else if(loggedProperty == "CAMERA_ENABLED"){
-								Camera objCamera = objInScene.GetComponent<Camera>();
-								if(objCamera != null){
-									if(splitLine[i+2] == "true" || splitLine[i+2] == "True"){
-										objCamera.enabled = true;
-									}
-									else{
-										objCamera.enabled = false;
-									}
-								}
-							}
-							else if(loggedProperty == "DESTROYED"){
-								Debug.Log("Destroying object! " + objInScene.name);
-								GameObject.Destroy(objInScene);
-							}
 						}
 						else{
 							Debug.Log("REPLAY: No obj in scene named " + objName);
@@ -268,12 +246,6 @@ public class Replay : MonoBehaviour {
 				//read the next line at the end of the while loop
 				currentLogFileLine = fileReader.ReadLine ();
 
-				/*if(hasFinishedSettingFrame){ //
-					yield return 0; //WHILE LOGGED ON FIXED UPDATE, REPLAY ON UPDATE TO GET A CONSTANT #RENDERED FRAMES
-
-					hasFinishedSettingFrame = false;
-
-				}*/
 			}
 		}
 
