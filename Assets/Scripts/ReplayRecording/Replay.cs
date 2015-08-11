@@ -160,7 +160,7 @@ public class Replay : MonoBehaviour {
 					else if (i == 2){
 						string objName = splitLine[i];
 
-						GameObject objInScene = null;
+						GameObject objInScene = GameObject.Find(objName);
 
 						//IF YOU LOG THE JOYSTICK, OR SOME OTHER NON-GEOMETRY ITEM...
 						//...don't go through the object instantiation part.
@@ -175,7 +175,7 @@ public class Replay : MonoBehaviour {
 						}
 						else{
 
-							objInScene = GameObject.Find(objName);
+							//objInScene = GameObject.Find(objName);
 
 							if(objInScene != null){
 								objsInSceneDict.Add(objName, objInScene);
