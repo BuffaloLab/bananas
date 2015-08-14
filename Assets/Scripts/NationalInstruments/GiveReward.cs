@@ -15,6 +15,7 @@ public class GiveReward : MonoBehaviour {
 
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 	public delegate void set_callback_del(IntPtr callback);
+	//public delegate void set_callback_del(IntPtr callback);
 
 	[DllImport ("NidaqPlugin")]
 	private static extern int eog_set_callback (
@@ -22,22 +23,47 @@ public class GiveReward : MonoBehaviour {
 			eye_data);
 	
 	[DllImport ("NidaqPlugin")]
-	private static extern int eog_start_task();
+	private static extern IntPtr eog_start_task();
 	
 	[DllImport ("NidaqPlugin")]
 	private static extern int eog_stop_task();
+
+	[DllImport ("NidaqPlugin")]
+	private static extern float DAQmxReadAnalogF64 (
+		int taskHandle,
+		Int32 sampsPerChan,
+		float timeout,
+		IntPtr interleaved,
+		float data,
+		UInt32 sizeArray,
+		Int32 read,
+		int? reserved);
+
+	public int numSamples = 1;
+	public IntPtr DAQmx_Val_GroupByScanNumber;
+	public Int32 read;
+	public float data;
 
 	// Use this for initialization
 	void Start () 
 	{
 		set_callback_del callback =
-			(data) =>
+			(status) =>
 				{	
 				Debug.Log ("made callback");
-				Debug.Log (data);
+				//Debug.Log (DAQmxReadAnalogF64(0,
+			    //                          numSamples,
+			    //                          1.0f,
+			    //                          DAQmx_Val_GroupByScanNumber,
+			    //                          data,
+			    //                          1,
+			    //                          read,
+			    //                          null));
+
+			     Debug.Log (status);
 				};
 		Debug.Log ("start task");
-		Debug.Log (eog_start_task ());	
+		Debug.Log (DAQmx_Val_GroupByScanNumber = eog_start_task ());	
 		Debug.Log ("set callback");
 		Debug.Log (eog_set_callback (callback));
 		Debug.Log ("callback set");
@@ -49,15 +75,16 @@ public class GiveReward : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if(Input.GetKeyDown(KeyCode.Z)){
+		if (Input.GetKeyDown (KeyCode.Z)) {
 			Debug.Log ("reward on");
 			Debug.Log (reward (1));
-		}
-		else if(Input.GetKeyDown(KeyCode.X)){
+		} else if (Input.GetKeyDown (KeyCode.X)) {
 			Debug.Log ("stop reward");
 			Debug.Log (reward (0));
-			Debug.Log ("stop task");
-			Debug.Log (eog_stop_task());
+		}
+		else if(Input.GetKeyDown(KeyCode.Q)){
+				Debug.Log ("stop task");
+				Debug.Log (eog_stop_task());
 		}
 	}
 }
