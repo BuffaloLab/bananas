@@ -45,9 +45,9 @@ public class GiveReward : MonoBehaviour {
 		Int32 sampsPerChan,
 		float timeout,
 		Int32 interleaved,
-		float data,
+		float[] data,
 		UInt32 sizeArray,
-		Int32 read,
+		ref Int32 read,
 		int? reserved);
 
 	public Int32 numSamples = 1;
@@ -57,7 +57,7 @@ public class GiveReward : MonoBehaviour {
 	// what the hell should this be?!?!?
 	// try using float data; in c++ code in example callback and see if it 
 	// barfs in not array.
-	public float data;
+	public float[] data;
 
 	// Use this for initialization
 	void Start () 
@@ -82,7 +82,7 @@ public class GiveReward : MonoBehaviour {
 			                              DAQmx_Val_GroupByChannel,
 			                              data,
 			                              1,
-			                              read,
+			                              ref read,
 			                              null));
 			Debug.Log ("read data");
 			};
