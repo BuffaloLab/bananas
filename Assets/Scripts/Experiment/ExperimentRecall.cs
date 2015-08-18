@@ -45,7 +45,7 @@ public class ExperimentRecall : Experiment {
 
 		//The following subscribes the NextFruit() method to the OnFoodCollision Delegate.
 		//Thus, whenever the OnFoodCollision event happens, NextFruit() will be called.
-		player.GetComponent<AvatarControls>().OnFoodCollisionDelegate += NextFruit;
+		player.GetComponent<AvatarControls_MainTask>().OnFoodCollisionDelegate += NextFruit;
 		NewTrial ();
 	}
 

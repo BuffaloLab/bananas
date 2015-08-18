@@ -9,7 +9,7 @@ public class ExperimentForaging : Experiment {
 
 	// Use this for initialization
 	void Start () {
-		player.GetComponent<AvatarControls>().OnFoodCollisionDelegate += removeOne;
+		player.GetComponent<AvatarControls_MainTask>().OnFoodCollisionDelegate += removeOne;
 	}
 	
 	// Update is called once per frame
