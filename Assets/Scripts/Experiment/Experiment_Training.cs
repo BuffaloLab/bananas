@@ -11,15 +11,24 @@ public class Experiment_Training : Experiment {
 	private bool isRight;
 	int level = 0;
 
+	//build layerMask for line up steps. "Food" is layer 8
+	int layerMask = 1 << 8;
+	RaycastHit hit;
+
 	float distToBanana = 5.0f; 
 	float angleToBanana = 10; //degrees
-	
+	bool inline;
+
+	float angleRange = 20;
+	bool isManual = false;
+
 
 	// Use this for initialization
 	void Start () {
 		//state = GameObject.FindGameObjectWithTag ("State").GetComponent<TrainingState>;
 		StartTrial ();
 		player.GetComponent<AvatarControls_Training>().OnFoodCollisionDelegate += StartTrial;
+		drawCrosshair = true;
 	}
 	
 	// Update is called once per frame
@@ -42,13 +51,40 @@ public class Experiment_Training : Experiment {
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			print("You pressed the space bar!!");
 		}
+
+		if (Input.GetKeyDown (KeyCode.M)) {
+			isManual ^= isManual;
+			print ("isManual is now "+ isManual);
+		}
+
 		//Check to see if fruit is lined upl
-		if (Physics.Raycast (player.transform.position, player.transform.forward)) {
-			print ("lined up!");
+		if (Physics.Raycast (player.transform.position, player.transform.forward, out hit, Mathf.Infinity,layerMask)) {
+			drawCrosshair = false;
+			inline = true;
 		} else {
-			print ("not lined up");
+			drawCrosshair = true;
+			inline = false;
+		}
+
+		switch (level) {
+		case(0):
+			//Bring to center, one direction.
+			if (inline){
+				DestroyFood ();
+				StartTrial();
+			}
+			break;
+		case(1):
+			break;
+		case(2):
+			break;
+		case(3):
+			break;
+		case(4):
+			break;
 		}
 	}
+	
 
 	void ResetPlayer(){
 		ResetPlayer (0f);
@@ -62,19 +98,25 @@ public class Experiment_Training : Experiment {
 
 	void StartTrial(){
 		ResetPlayer ();
-		if (level == 0) {
+		switch(level) {
+		case (0):
 			SpawnFruitInFront(5f);
 			SetDirection(20);
-		} else if (level == 1) {
+			break;
+		case(1):
 			//Overshoot now allowed. speed is slow after contact
-		} else if (level == 2) {
+			break;
+		case(2):
 			//Overshoot is now allowed. Not slow down.
-		} else if (level == 3) {
+			break;
+		case(3):
 			//Forward
 			state.Move = TrainingState.Movement.forward;
 			SpawnFruitInFront(5f);
-		} else if (level == 4) {
-			//Bring to center, then forward. 
+			break;
+		case(4):
+			//Bring to center, then forward.
+			break;
 		}
 		trialCount++;
 	}
@@ -92,5 +134,10 @@ public class Experiment_Training : Experiment {
 
 	void SpawnFruitInFront(float dist){
 		myFoodController.SpawnObjectAt (fruit, player.transform.forward * dist+ new Vector3(0f,.5f,0f), trialCount);
+	}
+
+	void DestroyFood(){
+		GameObject food = GameObject.FindGameObjectWithTag ("Food");
+		Destroy (food);
 	}
 }

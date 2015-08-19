@@ -6,6 +6,7 @@ public abstract class Experiment : MonoBehaviour {
 	public int ReplayFramesPerSecond = 60;
 	public bool isReplay;
 	public bool isSavingToPng;
+	public bool drawCrosshair;
 	public string PNGRecordingPath;
 	public FoodController myFoodController;
 }

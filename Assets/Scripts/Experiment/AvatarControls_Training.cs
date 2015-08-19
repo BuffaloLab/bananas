@@ -6,7 +6,12 @@ public class AvatarControls_Training : Avatar{
 
 	public delegate void OnFoodCollision();
 	public OnFoodCollision OnFoodCollisionDelegate;
-	
+
+	public delegate void OnFoodLineup();
+	public OnFoodLineup OnFoodLineupDelegate;
+
+	int layerMask = 1 << 8; //FOOD is layer 8--> mask only looks at this layer;
+	RaycastHit hit;
 	
 	void OnTriggerEnter(Collider other)
 	{
@@ -19,6 +24,12 @@ public class AvatarControls_Training : Avatar{
 
 
 	public override void GetInput(){
+		//Before really checking input, need to see if the last movement put us in line with the fruit
+
+		if (Physics.Raycast (transform.position, transform.forward, out hit, Mathf.Infinity,layerMask)) {
+			OnFoodLineupDelegate();
+		}
+
 		float verticalAxisInput = Input.GetAxis ("Vertical");
 		float horizontalAxisInput = Input.GetAxis ("Horizontal");
 		switch (state.Move){
