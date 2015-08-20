@@ -5,45 +5,37 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 
 public class GiveReward : MonoBehaviour {
-
-	//[DllImport ("NidaqPlugin")]
-	//private static extern int reward(int on);
-
-	static int reward (int on) {
+	
+	#if NIDAQ
+		[DllImport ("NidaqPlugin")]
+		private static extern int Reward(int on);
+	#else
+		int Reward(int on)
+		{
+			if (on == 1) {
+			Debug.Log("no nidaq, start reward");
+			} else {
+			Debug.Log ("no nidaq, stop reward");
+			}
 		return on;
-	}
+		}
+	#endif
 
-	//[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-	//public delegate void set_callback(IntPtr data);
-
-	//[DllImport ("NidaqPlugin")]
-	//private static extern int eog_set_callback (
-	//	[MarshalAs(UnmanagedType.FunctionPtr)]set_callback 
-	//		eog_callback);
-	
-	//[DllImport ("ASimplePlugin")]
-	//private static extern int reward(int on);
-	
 	// Use this for initialization
-	void Start () {
-		//eog_set_callback (eye_data);
-		//Debug.Log(PrintANumber());
-		// Debug.Log (reward (true));
-		//Debug.Log (reward (0));
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		if(Input.GetKeyDown(KeyCode.Z)){
-			Debug.Log (reward (1));
-		}
-		else if(Input.GetKeyDown(KeyCode.X)){
-			Debug.Log (reward (0));
-		}
+	void Start () 
+	{
+
 	}
 
-	void eye_data (int data) {
-		Debug.Log ("made callback");
-		Debug.Log (data);
+	// Update is called once per frame
+	void Update () 
+	{
+		if (Input.GetKeyDown (KeyCode.Z)) {
+			Debug.Log ("reward on");
+			Debug.Log (Reward (1));
+		} else if (Input.GetKeyDown (KeyCode.X)) {
+			Debug.Log ("stop reward");
+			Debug.Log (Reward (0));
+		}
 	}
 }
