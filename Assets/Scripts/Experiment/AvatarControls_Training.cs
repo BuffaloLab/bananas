@@ -18,10 +18,10 @@ public class AvatarControls_Training : Avatar{
 		if (other.gameObject.CompareTag ("Food")) 
 		{
 			OnFoodCollisionDelegate(); //All functions that subscribe to this event will be called.
+			reward.RewardAndFreeze(1);
 			Destroy(other.gameObject);
 		}
 	}
-
 
 	public override void GetInput(){
 		//Before really checking input, need to see if the last movement put us in line with the fruit

@@ -12,8 +12,16 @@ public class AvatarControls_MainTask: Avatar{
 		if (other.gameObject.CompareTag ("Food")) 
 		{
 			OnFoodCollisionDelegate(); //All functions that subscribe to this event will be called.
-			Destroy(other.gameObject);
+			reward.RewardAndFreeze(5);
+			StartCoroutine(DestroyAfterFreeze(other.gameObject));
 		}
+	}
+
+	IEnumerator DestroyAfterFreeze(GameObject destroyMe){
+		while (reward.isFrozen) {
+			yield return new WaitForSeconds(.01f);
+		}
+		Destroy (destroyMe);
 	}
 	
 	public override void GetInput()

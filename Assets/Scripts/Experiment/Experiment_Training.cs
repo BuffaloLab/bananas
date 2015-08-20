@@ -9,7 +9,7 @@ public class Experiment_Training : Experiment {
 	private int trialCount;
 
 	private bool isRight;
-	int level = 0;
+	public int level = 0;
 
 	//build layerMask for line up steps. "Food" is layer 8
 	int layerMask = 1 << 8;

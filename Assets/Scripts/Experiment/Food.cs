@@ -1,16 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Text.RegularExpressions;
-using System.Diagnostics;
 
 public class Food : MonoBehaviour {
 
 	AlphaChanger myAlphaChanger;
 
 	Material myMaterial;
-
-	Stopwatch beenWaiting = new Stopwatch();
-
 
 	void Start(){
 		myAlphaChanger = gameObject.GetComponent<AlphaChanger> ();
@@ -70,14 +66,4 @@ public class Food : MonoBehaviour {
 		}
 	}
 
-	void OnDestroy(){
-	/*	beenWaiting.Reset ();
-		while (beenWaiting.ElapsedMilliseconds<200) {
-			print ("Wait!!!!!!!!!!");
-			yield return null;
-		}
-		beenWaiting.Stop();
-*/
-		print ("Death to Fruit.");
-	}
 }
