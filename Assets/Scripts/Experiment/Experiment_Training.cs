@@ -15,8 +15,7 @@ public class Experiment_Training : Experiment {
 	int layerMask = 1 << 8;
 	RaycastHit hit;
 
-	float distToBanana = 5.0f; 
-	float angleToBanana = 10; //degrees
+	float distToBanana = 8.0f; 
 	bool inline;
 
 	float angleRange = 20;
@@ -25,10 +24,12 @@ public class Experiment_Training : Experiment {
 
 	// Use this for initialization
 	void Start () {
+
 		//state = GameObject.FindGameObjectWithTag ("State").GetComponent<TrainingState>;
-		StartTrial ();
 		player.GetComponent<AvatarControls_Training>().OnFoodCollisionDelegate += StartTrial;
+		player.GetComponent<AvatarControls_Training>().OnFoodLineupDelegate += SetInLine;
 		drawCrosshair = true;
+		StartTrial ();
 	}
 	
 	// Update is called once per frame
@@ -53,18 +54,31 @@ public class Experiment_Training : Experiment {
 		}
 
 		if (Input.GetKeyDown (KeyCode.M)) {
-			isManual ^= isManual;
+			if (isManual){
+				isManual=false;
+			}else{
+				isManual=true;
+			}
 			print ("isManual is now "+ isManual);
 		}
+		if (Input.GetKeyDown (KeyCode.Equals)) {
+			angleRange++;
+			print ("angleRange = "+angleRange);
+		}
+		if (Input.GetKeyDown (KeyCode.Minus)) {
+			angleRange--;
+			print ("angleRange = "+angleRange);
 
-		//Check to see if fruit is lined upl
-		if (Physics.Raycast (player.transform.position, player.transform.forward, out hit, Mathf.Infinity,layerMask)) {
+		}
+
+	//Check to see if fruit is lined upl
+	/*	if (Physics.Raycast (player.transform.position, player.transform.forward, out hit, Mathf.Infinity,layerMask)) {
 			drawCrosshair = false;
 			inline = true;
 		} else {
 			drawCrosshair = true;
 			inline = false;
-		}
+		}*/
 
 		switch (level) {
 		case(0):
@@ -83,6 +97,7 @@ public class Experiment_Training : Experiment {
 		case(4):
 			break;
 		}
+		inline = false;
 	}
 	
 
@@ -92,16 +107,25 @@ public class Experiment_Training : Experiment {
 
 	void ResetPlayer(float angle){
 		player.transform.position = new Vector3(0f, .5f, 0f);
+		player.GetComponent<Rigidbody> ().angularVelocity = Vector3.zero;
+		player.GetComponent<Rigidbody> ().velocity = Vector3.zero;
 		//Work out transform for rotation of player on start
 		player.transform.RotateAround (Vector3.zero, Vector3.up, angle);
+
 	}
 
 	void StartTrial(){
 		ResetPlayer ();
+		drawCrosshair = true;
+		inline = false;
 		switch(level) {
 		case (0):
-			SpawnFruitInFront(5f);
-			SetDirection(20);
+			SpawnFruitInFront(distToBanana);
+			if (isManual){
+				SetDirection(angleRange);
+			} else {
+				SetDirection(Random.Range(0,angleRange));
+			}
 			break;
 		case(1):
 			//Overshoot now allowed. speed is slow after contact
@@ -133,11 +157,18 @@ public class Experiment_Training : Experiment {
 	}
 
 	void SpawnFruitInFront(float dist){
-		myFoodController.SpawnObjectAt (fruit, player.transform.forward * dist+ new Vector3(0f,.5f,0f), trialCount);
+		transform.position = Vector3.zero;
+		myFoodController.SpawnObjectAt (fruit,transform.forward * dist+ new Vector3(0f,.5f,0f), trialCount);
 	}
 
 	void DestroyFood(){
 		GameObject food = GameObject.FindGameObjectWithTag ("Food");
 		Destroy (food);
 	}
+
+	void SetInLine(){
+		inline = true;
+		drawCrosshair = false;
+	}
+
 }
