@@ -88,7 +88,7 @@ public class FoodController : MonoBehaviour {
 				}
 			} while(itfits == false);
 		}
-		GameObject spawnedObj = Instantiate (foodToSpawn, new Vector3 (x, .5f, z), foodToSpawn.transform.rotation) as GameObject;
+		GameObject spawnedObj = Instantiate (foodToSpawn, new Vector3 (x, foodToSpawn.transform.position.y, z), foodToSpawn.transform.rotation) as GameObject;
 		exists.Add (spawnedObj);
 
 		float randomRotation = Random.Range (0.0f, 360.0f);

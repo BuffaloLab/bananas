@@ -83,7 +83,7 @@ public class ExperimentRecall : Experiment {
 			x = RandomPos ();
 			z = RandomPos ();
 		} while(Distance (x,z,player.transform.position.x,player.transform.position.z)<distanceThreshold);
-		bananaPosition =new Vector3(x,.5f,z);
+		bananaPosition =new Vector3(x,target.transform.position.y,z);
 		//
 		SpawnTarget();
 	}
@@ -153,7 +153,7 @@ public class ExperimentRecall : Experiment {
 			} while((Distance (x,z,player.transform.position.x,player.transform.position.z)<distanceThreshold) || (Distance (x,z,bananaPosition.x,bananaPosition.z)<distanceThreshold));
 			//Spawn distractor;
 			int distractorID = numDistractorFruit * currentEncoding + currentDistractor;//keeps track of distractor ID between target steps.
-			myFoodController.SpawnObjectAt (distractor, new Vector3 (x, .5f, z), distractorID);
+			myFoodController.SpawnObjectAt (distractor, new Vector3 (x, distractor.transform.position.y, z), distractorID);
 		}
 	}
 
