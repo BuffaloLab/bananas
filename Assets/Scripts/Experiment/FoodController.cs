@@ -13,7 +13,9 @@ public class FoodController : MonoBehaviour {
 	public float distThresh;
 	
 	private List<GameObject> exists; //food and the player that exist in the world
-	
+
+
+
 	void Start(){
 		exp = GameObject.FindGameObjectWithTag ("Experiment").GetComponent<Experiment> ();
 		exists = new List<GameObject> ();
@@ -50,7 +52,7 @@ public class FoodController : MonoBehaviour {
 		} else if (foodName == spawnCherry.GetComponent<Food> ().GetName ()) {
 			spawned = SpawnObject (spawnCherry, nameID);
 		} else {
-			Debug.Log ("Cannot spawn food of name: " + foodName);
+			UnityEngine.Debug.Log ("Cannot spawn food of name: " + foodName);
 		}
 
 		return spawned;
@@ -108,5 +110,7 @@ public class FoodController : MonoBehaviour {
 		exists.Clear ();
 		exists.Add (player);
 	}
+
+
 	
 }

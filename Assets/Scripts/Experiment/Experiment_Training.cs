@@ -24,6 +24,7 @@ public class Experiment_Training : Experiment {
 
 	// Use this for initialization
 	void Start () {
+
 		//state = GameObject.FindGameObjectWithTag ("State").GetComponent<TrainingState>;
 		player.GetComponent<AvatarControls_Training>().OnFoodCollisionDelegate += StartTrial;
 		player.GetComponent<AvatarControls_Training>().OnFoodLineupDelegate += SetInLine;
