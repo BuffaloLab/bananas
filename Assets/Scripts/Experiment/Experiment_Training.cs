@@ -6,6 +6,7 @@ public class Experiment_Training : Experiment {
 	public TrainingState state;
 	public GameObject fruit;
 
+	GiveReward reward;
 	private int trialCount;
 
 	private bool isRight;
@@ -28,6 +29,7 @@ public class Experiment_Training : Experiment {
 		//state = GameObject.FindGameObjectWithTag ("State").GetComponent<TrainingState>;
 		player.GetComponent<AvatarControls_Training>().OnFoodCollisionDelegate += StartTrial;
 		player.GetComponent<AvatarControls_Training>().OnFoodLineupDelegate += SetInLine;
+		reward = GameObject.FindGameObjectWithTag ("Reward").GetComponent<GiveReward> ();
 		drawCrosshair = true;
 		StartTrial ();
 	}
@@ -84,7 +86,8 @@ public class Experiment_Training : Experiment {
 		case(0):
 			//Bring to center, one direction.
 			if (inline){
-				DestroyFood ();
+				reward.RewardAndFreeze(3);
+				StartCoroutine(DestroyFoodAfterFreeze());
 				StartTrial();
 			}
 			break;
@@ -115,6 +118,13 @@ public class Experiment_Training : Experiment {
 	}
 
 	void StartTrial(){
+		StartCoroutine (StartTrialAfterFreeze());
+	}
+
+	IEnumerator StartTrialAfterFreeze(){
+		while (reward.isFrozen) {
+			yield return new WaitForSeconds(.01f);
+		}
 		ResetPlayer ();
 		drawCrosshair = true;
 		inline = false;
@@ -161,8 +171,11 @@ public class Experiment_Training : Experiment {
 		myFoodController.SpawnObjectAt (fruit,transform.forward * dist+ new Vector3(0f,.5f,0f), trialCount);
 	}
 
-	void DestroyFood(){
+	IEnumerator DestroyFoodAfterFreeze(){
 		GameObject food = GameObject.FindGameObjectWithTag ("Food");
+		while (reward.isFrozen) {
+			yield return new WaitForSeconds(.01f);
+		}
 		Destroy (food);
 	}
 

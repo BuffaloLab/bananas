@@ -7,23 +7,23 @@ public class AvatarControls_MainTask: Avatar{
 	public OnFoodCollision OnFoodCollisionDelegate;
 
 
-	void OnTriggerEnter(Collider other)
+	public void OnTriggerEnter(Collider other)
 	{
 		if (other.gameObject.CompareTag ("Food")) 
 		{
 			OnFoodCollisionDelegate(); //All functions that subscribe to this event will be called.
-			reward.RewardAndFreeze(5);
+			reward.RewardAndFreeze(3);
 			StartCoroutine(DestroyAfterFreeze(other.gameObject));
 		}
 	}
-
+	
 	IEnumerator DestroyAfterFreeze(GameObject destroyMe){
 		while (reward.isFrozen) {
 			yield return new WaitForSeconds(.01f);
 		}
 		Destroy (destroyMe);
 	}
-	
+
 	public override void GetInput()
 	{
 		float verticalAxisInput = Input.GetAxis ("Vertical");

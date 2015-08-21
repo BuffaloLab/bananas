@@ -13,14 +13,21 @@ public class AvatarControls_Training : Avatar{
 	int layerMask = 1 << 8; //FOOD is layer 8--> mask only looks at this layer;
 	RaycastHit hit;
 	
-	void OnTriggerEnter(Collider other)
+	public void OnTriggerEnter(Collider other)
 	{
 		if (other.gameObject.CompareTag ("Food")) 
 		{
 			OnFoodCollisionDelegate(); //All functions that subscribe to this event will be called.
-			reward.RewardAndFreeze(1);
-			Destroy(other.gameObject);
+			reward.RewardAndFreeze(3);
+			StartCoroutine(DestroyAfterFreeze(other.gameObject));
 		}
+	}
+	
+	IEnumerator DestroyAfterFreeze(GameObject destroyMe){
+		while (reward.isFrozen) {
+			yield return new WaitForSeconds(.01f);
+		}
+		Destroy (destroyMe);
 	}
 
 	public override void GetInput(){
