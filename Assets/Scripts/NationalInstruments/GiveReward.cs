@@ -1,6 +1,4 @@
-﻿
-#define NIDAQ
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
@@ -10,24 +8,30 @@ public class GiveReward : MonoBehaviour {
 	public bool isFrozen;
 	public AudioSource beepSound;
 
-	#if NIDAQ
+
+#if NIDAQ || !UNITY_WEBGL
 		[DllImport ("NidaqPlugin")]
 		private static extern int reward(int on);
-	#else
-		int Reward(int on)
+#else
+		int reward(int on)
 		{
 			if (on == 1) {
-			Debug.Log("no nidaq, start reward");
+				Debug.Log("no nidaq, start reward");
 			} else {
-			Debug.Log ("no nidaq, stop reward");
+				Debug.Log ("no nidaq, stop reward");
 			}
-		return on;
+			return on;
 		}
-	#endif
+#endif
 
 	// Use this for initialization
 	void Start () 
 	{
+#if NIDAQ || !UNITY_WEBGL
+		Debug.Log ("NIDAQ!");
+#else
+		Debug.Log ("NOT NO|IDAQ!");
+#endif
 		//isFrozen = false;
 	}
 

@@ -11,8 +11,11 @@ public class AvatarControls_MainTask: Avatar{
 	{
 		if (other.gameObject.CompareTag ("Food")) 
 		{
+			UnityEngine.Debug.Log ("one");
 			OnFoodCollisionDelegate(); //All functions that subscribe to this event will be called.
+			UnityEngine.Debug.Log ("two");
 			reward.RewardAndFreeze(3);
+			UnityEngine.Debug.Log ("three");
 			StartCoroutine(DestroyAfterFreeze(other.gameObject));
 		}
 	}

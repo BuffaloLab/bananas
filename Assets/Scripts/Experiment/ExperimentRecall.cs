@@ -79,6 +79,7 @@ public class ExperimentRecall : Experiment {
 		//Find a good location for the distractor
 		float x;
 		float z;
+		print ("random place");
 		do {
 			x = RandomPos ();
 			z = RandomPos ();
@@ -86,6 +87,7 @@ public class ExperimentRecall : Experiment {
 		bananaPosition =new Vector3(x,target.transform.position.y,z);
 		//
 		SpawnTarget();
+		print ("end of newtrial");
 	}
 
 	//Change state, advance to next fruit. 
