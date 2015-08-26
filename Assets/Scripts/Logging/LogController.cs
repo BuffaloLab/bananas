@@ -5,6 +5,7 @@ public class LogController : MonoBehaviour {
 	public string sName;
 	private string logfile;
 	[HideInInspector] public Logger_Threading log;
+	//public Logger_Threading eyeLog;
 
 	private static LogController _instance;
 	public static LogController Instance{
