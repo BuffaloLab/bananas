@@ -1,5 +1,4 @@
 ﻿
-#define NIDAQ
 using UnityEngine;
 using System;
 using System.Collections;
@@ -14,7 +13,7 @@ public class GiveReward : MonoBehaviour {
 		[DllImport ("NidaqPlugin")]
 		private static extern int reward(int on);
 	#else
-		int Reward(int on)
+		int reward(int on)
 		{
 			if (on == 1) {
 			Debug.Log("no nidaq, start reward");
