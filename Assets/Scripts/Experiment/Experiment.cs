@@ -10,20 +10,10 @@ public abstract class Experiment : MonoBehaviour {
 	public string PNGRecordingPath;
 	public FoodController myFoodController;
 	private static Experiment _instance;
-
-	public void Awake(){
-		if (_instance != null) {
-			Debug.Log ("Instance already exists!");
-			return;
-		}
-		_instance = this;
-	}
-
 	public static Experiment Instance{
 		get{
 			return _instance;
 		}
 	}
-
 
 }
