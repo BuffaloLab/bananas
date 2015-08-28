@@ -76,7 +76,6 @@ public class GetData : MonoBehaviour
 		if (Input.GetKeyDown (KeyCode.Q)) {
 			Debug.Log ("stop task");
 			Debug.Log (EOGStopTask (taskHandle1));
-			//Debug.Log (EOGStopTask (taskHandle2));
 		}
 	}
 

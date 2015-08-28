@@ -9,4 +9,12 @@ public abstract class Experiment : MonoBehaviour {
 	public bool drawCrosshair;
 	public string PNGRecordingPath;
 	public FoodController myFoodController;
+
+	private static Experiment _instance;
+	
+	public static Experiment Instance{
+		get{
+			return _instance;
+		}
+	}
 }

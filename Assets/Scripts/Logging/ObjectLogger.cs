@@ -2,8 +2,10 @@
 using System.Collections;
 
 public class ObjectLogger : MonoBehaviour {
-	Logger_Threading experimentLog {get {return LogController.Instance.log; }}
 	Experiment exp;
+	//public Experiment exp {get {return Experiment.Instance;}}
+	public Logger_Threading experimentLog {get {return LogController.Instance.log;}}
+	public Logger_Threading eyeLog {get{return LogController.Instance.eyeLog;}}
 
 	void Awake(){
 		exp = GameObject.FindGameObjectWithTag ("Experiment").GetComponent<Experiment>();
