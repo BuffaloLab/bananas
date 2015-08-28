@@ -157,14 +157,14 @@ public class LoggerWriter : ThreadedJob
 	
 }
 
-public class Logger_Threading : MonoBehaviour{
+public class Logger_Threading {//: MonoBehaviour{
 	LoggerQueue myLoggerQueue;
 	LoggerWriter myLoggerWriter;
 
 	Experiment exp;
 
 	//protected static string fileName;
-	public static string fileName;
+	public string fileName;
 
 	int frameCount = 0;
 
@@ -211,8 +211,8 @@ public class Logger_Threading : MonoBehaviour{
 	public void close(){
 		//Application stopped running -- close() was called
 		//applicationIsRunning = false;
-		if (!exp.isReplay) {
-			myLoggerWriter.End ();
-		}
+		//if (!exp.isReplay) {
+		myLoggerWriter.End ();
+		//}
 	}
 }

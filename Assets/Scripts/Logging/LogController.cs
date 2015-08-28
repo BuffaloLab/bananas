@@ -4,8 +4,9 @@ using System.Collections;
 public class LogController : MonoBehaviour {
 	public string sName;
 	private string logfile;
+	private string eyeLogfile;
 	[HideInInspector] public Logger_Threading log;
-	//public Logger_Threading eyeLog;
+	public Logger_Threading eyeLog;
 
 	private static LogController _instance;
 	public static LogController Instance{
@@ -21,12 +22,13 @@ public class LogController : MonoBehaviour {
 			return;
 		}
 		_instance = this;
-		logfile = "DataFile/"+sName+"Log.txt"; //NOTE: THIS FOLDER MUST EXIST
-
+		logfile = "DataFile/" + sName + "Log.txt"; //NOTE: THIS FOLDER MUST EXIST
+		eyeLogfile = "DataFile/" + sName + "EyeLog.txt";
 		//log.fileName = logfile;
-		log= GetComponent<Logger_Threading> ();
-		Logger_Threading.fileName = logfile;
-
+		//log= GetComponent<Logger_Threading> ();
+		//Logger_Threading.fileName = logfile;
+		log.fileName = logfile;
+		eyeLog.fileName = eyeLogfile;
 	}
 
 	// Use this for initialization
