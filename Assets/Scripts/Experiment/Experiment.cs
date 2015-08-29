@@ -24,4 +24,5 @@ public abstract class Experiment : MonoBehaviour {
 			return _instance;
 		}
 	}
+
 }

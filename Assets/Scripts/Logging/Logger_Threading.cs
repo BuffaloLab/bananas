@@ -157,7 +157,7 @@ public class LoggerWriter : ThreadedJob
 	
 }
 
-public class Logger_Threading : MonoBehaviour{
+public class Logger_Threading : MonoBehaviour {
 	LoggerQueue myLoggerQueue;
 	LoggerWriter myLoggerWriter;
 

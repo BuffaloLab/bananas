@@ -19,15 +19,8 @@ public class LogController : MonoBehaviour {
 
 		logfile = "DataFile/" + sName + "Log.txt"; //NOTE: THIS FOLDER MUST EXIST
 		eyeLogfile = "DataFile/" + sName + "EyeLog.txt";
-
-		//experimentLog = new Logger_Threading ();
-		//eyeLog = new Logger_Threading ();
 		experimentLog.fileName = logfile;
 		eyeLog.fileName = eyeLogfile;
-		//log.fileName = logfile;
-		//log= GetComponent<Logger_Threading> ();
-		//Logger_Threading.fileName = logfile;
-
 	}
 
 	// Use this for initialization
