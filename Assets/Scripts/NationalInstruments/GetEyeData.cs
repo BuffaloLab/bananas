@@ -6,7 +6,7 @@ using System.Reflection;
 
 public class GetEyeData : MotherOfLogs 
 {
-	//#if NIDAQ
+	#if NIDAQ
 	// this declares the callback (delegate) that we will be
 	// calling from the C code
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -59,7 +59,8 @@ public class GetEyeData : MotherOfLogs
 			{
 				Debug.Log ("in callback");
 				data = EOGReturnData(taskHandle);
-				Debug.Log (data.Length);
+				// is it putting each number in a different element? but still too big!
+				//Debug.Log (data.Length);
 				Debug.Log (data[0]);
 				Debug.Log (data[1]);
 
@@ -109,5 +110,5 @@ public class GetEyeData : MotherOfLogs
 		Debug.Log (EOGStopTask (taskHandle1));
 		Debug.Log ("closed task");
 	}
-	//#endif
+	#endif
 }
