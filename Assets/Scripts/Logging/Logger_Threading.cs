@@ -164,7 +164,7 @@ public class Logger_Threading : MonoBehaviour{
 	Experiment exp;
 
 	//protected static string fileName;
-	public static string fileName;
+	public string fileName;
 
 	int frameCount = 0;
 

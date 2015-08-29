@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ObjectLogger : MonoBehaviour {
-	Experiment exp;
+public class ObjectLogger : MotherOfLogs {
+	//Experiment exp;
 	//public Experiment exp {get {return Experiment.Instance;}}
-	public Logger_Threading experimentLog {get {return LogController.Instance.log;}}
-	public Logger_Threading eyeLog {get{return LogController.Instance.eyeLog;}}
+	//public Logger_Threading experimentLog {get {return LogController.Instance.log;}}
+	//public Logger_Threading eyeLog {get{return LogController.Instance.eyeLog;}}
 
 	void Awake(){
-		exp = GameObject.FindGameObjectWithTag ("Experiment").GetComponent<Experiment>();
+		//exp = GameObject.FindGameObjectWithTag ("Experiment").GetComponent<Experiment>();
 	}
 
 	// Use this for initialization
@@ -26,7 +26,7 @@ public class ObjectLogger : MonoBehaviour {
 
 	void LogPosition(){
 		//experimentLog.Log("Test_position");
-		experimentLog.Log (GameClock.Instance.SystemTime_Milliseconds, 
+		eyeLog.Log (GameClock.Instance.SystemTime_Milliseconds, 
 		                   gameObject.name + ",POSITION," + gameObject.transform.position.x + "," + gameObject.transform.position.y + "," + gameObject.transform.position.z);
 	}
 
