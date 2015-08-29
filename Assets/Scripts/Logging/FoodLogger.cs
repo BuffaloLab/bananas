@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FoodLogger : MotherOfLogs {
-	//Experiment exp;
+public class FoodLogger : MonoBehaviour {
+	Logger_Threading experimentLog {get {return LogController.Instance.log; }}
+	Experiment exp;
+
 	Food myFood;
 
 	void Awake(){
-	//	exp = GameObject.FindGameObjectWithTag ("Experiment").GetComponent<Experiment> ();
+		exp = GameObject.FindGameObjectWithTag ("Experiment").GetComponent<Experiment> ();
 		myFood = GetComponent<Food> ();
 	}
 
@@ -20,7 +22,6 @@ public class FoodLogger : MotherOfLogs {
 	void LogSpawned(){
 		if (!exp.isReplay) {
 			experimentLog.Log (GameClock.Instance.SystemTime_Milliseconds, myFood.GetName () + ",SPAWNED");
-			logX.Log (GameClock.Instance.SystemTime_Milliseconds, myFood.GetName () + ",It Works");
 		}
 	}
 

@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ObjectLogger : MotherOfLogs{
+public class ObjectLogger : MonoBehaviour {
 	Logger_Threading experimentLog {get {return LogController.Instance.log; }}
-	//Experiment exp;
+	Experiment exp;
 
 	void Awake(){
-	//	exp = GameObject.FindGameObjectWithTag ("Experiment").GetComponent<Experiment>();
+		exp = GameObject.FindGameObjectWithTag ("Experiment").GetComponent<Experiment>();
 	}
 
 	// Use this for initialization
@@ -19,7 +19,6 @@ public class ObjectLogger : MotherOfLogs{
 		if (!exp.isReplay) {
 			LogPosition ();
 			LogRotation ();
-			logX.Log(GameClock.Instance.SystemTime_Milliseconds, ",It Works");
 		}
 	}
 
