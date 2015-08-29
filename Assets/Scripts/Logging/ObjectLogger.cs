@@ -22,7 +22,7 @@ public class ObjectLogger : MotherOfLogs {
 
 	void LogPosition(){
 		//experimentLog.Log("Test_position");
-		eyeLog.Log (GameClock.Instance.SystemTime_Milliseconds, 
+		experimentLog.Log (GameClock.Instance.SystemTime_Milliseconds, 
 		                   gameObject.name + ",POSITION," + gameObject.transform.position.x + "," + gameObject.transform.position.y + "," + gameObject.transform.position.z);
 	}
 

@@ -4,8 +4,9 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.Reflection;
 
-public class GetData : MonoBehaviour 
+public class GetEyeData : MotherOfLogs 
 {
+	//#if NIDAQ
 	// this declares the callback (delegate) that we will be
 	// calling from the C code
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -31,30 +32,51 @@ public class GetData : MonoBehaviour
 	private static extern Int32 EOGStopTask(IntPtr taskHandle);
 	
 	[DllImport ("NidaqPlugin")]
-	private static extern Double EOGReturnData(IntPtr taskHandle);
+	private static extern Double[] EOGReturnData(IntPtr taskHandle);
 	
 	// private Int32 numSamples = 1;
 	private Int32 DAQmx_Val_GroupByChannel;
 	private Int32 read;
 	// set this to a ridiculous number so sure we are getting data
-	public Double data = 20;
+	public Double[] data = new double[2];
 	private IntPtr taskHandle1;
 	private IntPtr taskHandle2;
-	public String channel1 = "Dev1/ai3:4";
+	private String[] stringData;
+	public String channel1 = "Dev1/ai3";
+	public String channel2 = "Dev1/ai4";
 
 	// Use this for initialization
 	void Start () 
 	{
+		Debug.Log ("length of data at start");
+		Debug.Log (data.Length);
 		// this defines the callback that is called from the C++
 		// code. 
 		EOGCallbackDel EOGCallback =
 			(IntPtr taskHandle, Int32 everyNSamplesEventType, UInt32 nSamples, IntPtr callbackData) =>
 		{	
-			Debug.Log ("made callback");
-			Debug.Log (data);
 			try
 			{
-				Debug.Log (data = EOGReturnData(taskHandle));
+				Debug.Log ("in callback");
+				data = EOGReturnData(taskHandle);
+				Debug.Log (data.Length);
+				Debug.Log (data[0]);
+				Debug.Log (data[1]);
+
+				/*
+				for(int i = 0; i < data.Length; ++i)
+				{
+					stringData += data[i].ToString();
+					if (i < data.Length)
+					{
+						stringData += ", ";
+					}
+				}
+				*/
+				//stringData = Array.ConvertAll(data, element => element.ToString());
+				//Debug.Log(string.Join(", ", stringData));
+				//Debug.Log (stringData);
+				//eyeLog.Log (GameClock.Instance.SystemTime_Milliseconds, stringData);
 			}
 			catch (Exception ex)
 			{
@@ -65,6 +87,7 @@ public class GetData : MonoBehaviour
 		};
 		Debug.Log ("start task");
 		Debug.Log (taskHandle1 = EOGStartTask (channel1));
+		Debug.Log (taskHandle1 = EOGStartTask (channel2));
 		Debug.Log ("set callback");
 		Debug.Log (EOGSetCallback (EOGCallback, taskHandle1));
 		Debug.Log ("callback set");
@@ -86,4 +109,5 @@ public class GetData : MonoBehaviour
 		Debug.Log (EOGStopTask (taskHandle1));
 		Debug.Log ("closed task");
 	}
+	//#endif
 }
