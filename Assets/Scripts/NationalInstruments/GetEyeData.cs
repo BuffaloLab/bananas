@@ -32,15 +32,18 @@ public class GetEyeData : MotherOfLogs
 	private static extern Int32 EOGStopTask(IntPtr taskHandle);
 	
 	[DllImport ("NidaqPlugin")]
-	private static extern Double[] EOGReturnData(IntPtr taskHandle);
-	
-	// private Int32 numSamples = 1;
-	private Int32 DAQmx_Val_GroupByChannel;
+	private static extern IntPtr EOGReturnData(IntPtr taskHandle);
+
 	private Int32 read;
-	// set this to a ridiculous number so sure we are getting data
-	public Double[] data = new double[2];
+	// initialize data
+	//public Double[] data = new double[2];
+	// Initialize unmanged memory to hold the array.
+	//static int size = Marshal.SizeOf(newData[0]) * newData.Length;
+	//IntPtr pnt = Marshal.AllocHGlobal(size);
+
+	public Double[] newData = new double[2];
+	//public Int32[] newData = new Int32[2];
 	private IntPtr taskHandle1;
-	private IntPtr taskHandle2;
 	private String[] stringData;
 	public String channel1 = "Dev1/ai3";
 	public String channel2 = "Dev1/ai4";
@@ -48,22 +51,32 @@ public class GetEyeData : MotherOfLogs
 	// Use this for initialization
 	void Start () 
 	{
-		Debug.Log ("length of data at start");
-		Debug.Log (data.Length);
 		// this defines the callback that is called from the C++
 		// code. 
 		EOGCallbackDel EOGCallback =
 			(IntPtr taskHandle, Int32 everyNSamplesEventType, UInt32 nSamples, IntPtr callbackData) =>
 		{	
+			IntPtr ptrData = EOGReturnData(taskHandle);
+			Debug.Log ("in callback");
 			try
 			{
-				Debug.Log ("in callback");
-				data = EOGReturnData(taskHandle);
+				//ptrData = EOGReturnData(taskHandle);
+				//Debug.Log ("got data");
+				Marshal.Copy ( ptrData, newData, 0, 2);
+				//Debug.Log (ptrData[0]);
+				//Debug.Log (ptrData[1]);
+				// ugh. data is still not transferring correctly. 
+			
 				// is it putting each number in a different element? but still too big!
 				//Debug.Log (data.Length);
-				Debug.Log (data[0]);
-				Debug.Log (data[1]);
+				//Debug.Log ("get length");
+				//Debug.Log (newData.GetLength(0));
+				//EOGClearData(ptrData);
+				//Debug.Log ("cleared data");
 
+				Debug.Log (newData[0]);
+				Debug.Log (newData[1]);
+			
 				/*
 				for(int i = 0; i < data.Length; ++i)
 				{
@@ -84,6 +97,11 @@ public class GetEyeData : MotherOfLogs
 				Debug.Log ("Exception");
 				Debug.Log (ex.Message);
 				Debug.Log (ex.GetBaseException());
+			}
+			finally 
+			{
+				// Free the unmanaged memory.
+				Marshal.FreeHGlobal(ptrData);
 			}
 		};
 		Debug.Log ("start task");
