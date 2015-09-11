@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Linq;
 
 public class GetEyeData : MotherOfLogs 
 {
@@ -37,7 +38,7 @@ public class GetEyeData : MotherOfLogs
 	
 	public Double[] newData = new double[2];
 	private IntPtr taskHandle1;
-	private String[] stringData;
+	private String stringData;
 	// no idea why I can't set the second channel. Give up. Hard coding in C++ :(
 	// public String channel1 = "Dev1/ai3";
 	// public String channel2 = "Dev1/ai4";
@@ -51,55 +52,43 @@ public class GetEyeData : MotherOfLogs
 			(IntPtr taskHandle, Int32 everyNSamplesEventType, UInt32 nSamples, IntPtr callbackData) =>
 		{	
 			IntPtr ptrData = EOGReturnData(taskHandle);
-			Debug.Log ("in callback");
+			// Debug.Log ("in callback");
 
 			Marshal.Copy ( ptrData, newData, 0, 2);
 
-			Debug.Log (newData[0]);
-			Debug.Log (newData[1]);
-			
-			/*
-			for(int i = 0; i < data.Length; ++i)
-			{
-				stringData += data[i].ToString();
-				if (i < data.Length)
-				{
-					stringData += ", ";
-				}
-			}
-			*/
-			//stringData = Array.ConvertAll(data, element => element.ToString());
-			//Debug.Log(string.Join(", ", stringData));
-			//Debug.Log (stringData);
-			//eyeLog.Log (GameClock.Instance.SystemTime_Milliseconds, stringData);
+			// Debug.Log (newData[0]);
+			// Debug.Log (newData[1]);
+
+			stringData = String.Join(",", newData.Select(p=>p.ToString()).ToArray());
+			// Debug.Log ( stringData );
+			eyeLog.Log (GameClock.Instance.SystemTime_Milliseconds, stringData);
 		
 			// Free the unmanaged memory.
 			Marshal.FreeHGlobal(ptrData);
 		};
-		Debug.Log ("start task");
-		Debug.Log (taskHandle1 = EOGStartTask ());
-		Debug.Log ("set channels");
-		Debug.Log (taskHandle1 = EOGSetChannel ());
-		Debug.Log ("set callback");
-		Debug.Log (taskHandle1 = EOGSetCallback (EOGCallback));
-		Debug.Log ("callback set");
+		// Debug.Log ("start task");
+		taskHandle1 = EOGStartTask ();
+		// Debug.Log ("set channels");
+		taskHandle1 = EOGSetChannel ();
+		// Debug.Log ("set callback");
+		taskHandle1 = EOGSetCallback (EOGCallback);
+		// Debug.Log ("callback set");
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
 		if (Input.GetKeyDown (KeyCode.Q)) {
-			Debug.Log ("stop task");
-			Debug.Log (EOGStopTask (taskHandle1));
+			// Debug.Log ("stop task");
+			EOGStopTask (taskHandle1);
 		}
 	}
 
 	public void OnDestroy ()
 	{
-		//Application stopped running -- close() was called
-		//applicationIsRunning = false;
-		Debug.Log (EOGStopTask (taskHandle1));
-		Debug.Log ("closed task");
+		// Application stopped running -- close() was called
+		EOGStopTask (taskHandle1);
+		// Debug.Log ("closed task");
 	}
 	#endif
 }
