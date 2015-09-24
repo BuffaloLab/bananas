@@ -1,27 +1,16 @@
 fileFormatVersion: 2
-guid: d7b8b6a5b0fa1434398b4e1fc6981d9d
-timeCreated: 1438627042
+guid: 6352db8992093034dad730bb59dd7b21
+timeCreated: 1443135959
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:
-    100000: Banana
-    100002: //RootNode
-    100004: 'camera #5'
-    100006: 'light #1'
-    100008: 'light #2'
-    100010: 'light #3'
-    100012: 'light #4'
-    400000: Banana
-    400002: //RootNode
-    400004: 'camera #5'
-    400006: 'light #1'
-    400008: 'light #2'
-    400010: 'light #3'
-    400012: 'light #4'
-    2300000: Banana
-    3300000: Banana
-    4300000: Banana
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Banana_Banana
+    9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
@@ -78,8 +67,10 @@ ModelImporter:
     legStretch: .0500000007
     feetSpacing: 0
     rootMotionBoneName: 
+    hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
+  humanoidOversampling: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
