@@ -6,7 +6,7 @@ public class LogController : MonoBehaviour {
 	private string logfile;
 	private string eyeLogfile;
 	public Logger_Threading experimentLog;
-	public Logger_Threading eyeLog;
+	public LogEyeData eyeLog;
 	private static LogController _instance;
 
 	//When the program starts, log needs to be a singleton
@@ -18,9 +18,11 @@ public class LogController : MonoBehaviour {
 		_instance = this;
 
 		logfile = "DataFile/" + sName + "Log.txt"; //NOTE: THIS FOLDER MUST EXIST
-		eyeLogfile = "DataFile/" + sName + "EyeLog.txt";
-		experimentLog.fileName = logfile;
+        experimentLog.fileName = logfile;
+
+        eyeLogfile = "DataFile/" + sName + "EyeLog.txt";
 		eyeLog.fileName = eyeLogfile;
+        eyeLog.StartLogging(eyeLogfile);
 	}
 
 	// Use this for initialization

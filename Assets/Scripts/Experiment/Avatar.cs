@@ -33,6 +33,12 @@ public abstract class Avatar: MonoBehaviour{
 			GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 			GetComponent<Collider>().enabled = false;
 		}
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			//Debug.Log ("Escape!");
+			Application.Quit();
+			//Debug.Log ("Successfully Escaped!");
+		}
 	}
 
 	public abstract void GetInput();

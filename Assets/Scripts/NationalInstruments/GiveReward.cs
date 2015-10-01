@@ -41,6 +41,7 @@ public class GiveReward : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown (KeyCode.Space)) {
+			Debug.Log ("Extra Reward!");
 			RewardAndGo(1);
 		}
 	}

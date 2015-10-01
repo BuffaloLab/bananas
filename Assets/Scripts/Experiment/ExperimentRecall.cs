@@ -5,9 +5,10 @@ using System.Diagnostics;
 public class ExperimentRecall : Experiment {
 	//Get the ability to log stuff!
 	Logger_Threading experimentLog {get {return LogController.Instance.experimentLog; }}
-	Logger_Threading eyeLog {get{return LogController.Instance.eyeLog;}}
+    LogEyeData eyeLog { get { return LogController.Instance.eyeLog; } }
+    //Logger_Threading eyeLog {get{return LogController.Instance.eyeLog;}}
 
-	Stopwatch recallTimer;
+    Stopwatch recallTimer;
 	long maxRecallTimeMS = 60000; //in milliseconds
 
 	//Subject config settings

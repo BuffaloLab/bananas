@@ -134,7 +134,7 @@ public class LoggerWriter : ThreadedJob
 	
 	public virtual void close()
 	{
-		//logfile.WriteLine ("EOF");
+		logfile.WriteLine ("EOF");
 		logfile.Flush ();
 		logfile.Close();	
 		Debug.Log ("flushing & closing");
@@ -178,8 +178,8 @@ public class Logger_Threading : MonoBehaviour {
 		
 			myLoggerWriter.Start ();
 		
-			myLoggerWriter.log ("DATE: " + DateTime.Now.ToString ("M/d/yyyy")); //might not be needed
-		}
+			myLoggerWriter.log ("DATE: " + DateTime.Now.ToString ("M/d/yyyy, " + GameClock.Instance.SystemTime_Milliseconds));
+        }
 	}
 	
 	public Logger_Threading(string file){
