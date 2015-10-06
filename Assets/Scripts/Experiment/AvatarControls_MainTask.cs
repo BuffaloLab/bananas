@@ -42,9 +42,10 @@ public class AvatarControls_MainTask: Avatar{
 		float horizontalAxisInput = Input.GetAxis ("Horizontal");
 		
 		if (Mathf.Abs (horizontalAxisInput) > 0.01f) { //for any hardware calibration errors
-			
-			//Turn( horizontalAxisInput*RotationSpeed*(Time.deltaTime) ); 
-			GetComponent<Rigidbody> ().angularVelocity = Vector3.up * horizontalAxisInput * RotationSpeed;
+
+			float percent = horizontalAxisInput / 1.0f;
+			Turn (percent * RotationSpeed * Time.deltaTime); 
+			//GetComponent<Rigidbody> ().angularVelocity = Vector3.up * horizontalAxisInput * RotationSpeed;
 			//Debug.Log("horizontal axis ANG VEL = " + GetComponent<Rigidbody>().angularVelocity);
 		}
 		else {
