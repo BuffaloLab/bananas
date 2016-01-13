@@ -9,7 +9,7 @@ public abstract class Avatar: MonoBehaviour{
 	public bool ShouldLockControls = false;
 	public float driveSpeed = 5.0f;
 
-	public float RotationSpeed = 1;
+	public float RotationSpeed = 0.5f;
 
 	// Use this for initialization
 	void Start () {
